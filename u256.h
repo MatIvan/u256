@@ -15,10 +15,15 @@ public:
     u256 &operator=(const u256 &other);
     u256 &operator+(const u256 &other);
     u256 &operator-(const u256 &other);
+    u256 &operator*(const u256 &other);
     const unsigned char &operator[]( int i ) const;
 
     void clear();
     int  length() const;
+    bool set( const u256 &other );
+    bool set( int position, unsigned char value );
+
+    void print( bool full = false ) const;
 
 private:
     unsigned char array[array_size];
