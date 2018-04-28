@@ -17,37 +17,37 @@ const unsigned char &u256::operator[]( int i) const
     return array[i];
 }
 
-u256 &u256::operator+( const u256 &other )
+u256 u256::operator+( const u256 &other ) const
 {
+    u256 result;
     unsigned int c=0;
     int len = std::max(length(), other.length())+1;
 
     for (int i = 0; i<len ; i++ ){
         c += array[i] + other[i];
-        array[i] = c % base;
+        result.set(i, c % base );
         c /= base;
     }
-    calculate_length();
-    return *this;
+    return result;
 }
 
-u256 &u256::operator-( const u256 &other )
+u256 u256::operator-( const u256 &other ) const
 {
+    u256 result;
     int c=0;
     int l=0;
     int len = std::max(length(), other.length())+1;
     for (int i = 0; i<len ; i++ ){
         l = array[i] - c - other[i];
         c = l<0 ? 1 : 0;
-        array[i] = base*c + l ;
+        result.set(i, base * c + l);
         /* Без условия, но так медленнее (наверное).
          * l = base + array[i] - c - other[i];
          * array[i] = l % base;
          * c = 1 - l / base;
          */
     }
-    calculate_length();
-    return *this;
+    return result;
 }
 
 u256 &u256::operator=( const u256 &other )
@@ -56,7 +56,38 @@ u256 &u256::operator=( const u256 &other )
     return *this;
 }
 
-u256 &u256::operator*( const u256 & other )
+bool u256::operator==( const u256 &other ) const
+{
+    for(int i=0; i<array_size; i++){
+        if (array[i]!=other[i]) return false;
+    }
+    return true;
+}
+
+bool u256::operator<(const u256 &other) const
+{
+    for( int i=array_size-1; i>=0; i-- ){
+        if (array[i]!=other[i]) return ( array[i]<other[i] );
+    }
+    return false;
+}
+
+bool u256::operator<=(const u256 &other) const
+{
+    return ((*this < other) | (*this == other));
+}
+
+bool u256::operator>(const u256 &other) const
+{
+    return (other < *this);
+}
+
+bool u256::operator>=(const u256 &other) const
+{
+    return (other <= *this);
+}
+
+u256 u256::operator*( const u256 & other ) const
 {
     unsigned int c=0;
     u256 k, r;
@@ -71,15 +102,7 @@ u256 &u256::operator*( const u256 & other )
         }
         r = r + k;
     }
-    //set( r );
-    r.print();
-    for (int i=0; i>array_size; i++){
-        array[i] = r[i];
-    }
-    _length = r.length();
-    print();
-
-    return *this;
+    return r;
 }
 
 void u256::clear()
@@ -97,7 +120,7 @@ int u256::length() const
 
 bool u256::set(const u256 &other)
 {
-    for (int i=0; i>array_size; i++){
+    for (int i=0; i<array_size; i++){
         array[i] = other[i];
     }
     _length = other.length();
