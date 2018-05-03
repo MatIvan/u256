@@ -56,6 +56,26 @@ u256 &u256::operator=( const u256 &other )
     return *this;
 }
 
+u256 &u256::operator<<(int n)
+{
+    for(int i=array_size-1; i>=0 ;i--){
+        if (i<n) array[i]=0;
+        else     array[i]=array[i-n];
+    }
+    calculate_length();
+    return *this;
+}
+
+u256 &u256::operator>>(int n)
+{
+    for(int i=0; i<array_size; i++){
+        if (i>=array_size-n) array[i]=0;
+        else array[i]=array[i+n];
+    }
+    calculate_length();
+    return *this;
+}
+
 bool u256::operator==( const u256 &other ) const
 {
     for(int i=0; i<array_size; i++){
@@ -105,6 +125,31 @@ u256 u256::operator*( const u256 & other ) const
     return r;
 }
 
+u256 u256::operator/(const u256 &other) const
+{
+    u256 r;
+    if(other == r) return r; //division by zero
+
+    u256 m,s;
+    m = *this;
+    s = other;
+
+    if (m.length() > s.length()) {
+        s << ( m.length() - s.length() );
+    }
+
+    for (;;){
+        while ( m >= s ){
+            m = m - s;
+            r = r + 1;
+        }
+        if ( s.length() <= other.length() ) break;
+        s >> 1;
+        r << 1;
+    }
+    return r;
+}
+
 void u256::clear()
 {
     for ( int i = 0; i < array_size; i++){
@@ -138,10 +183,12 @@ bool u256::set(int position, unsigned char value)
 void u256::print( bool full ) const
 {
     int l = full ? array_size : length();
-    for (int i=l-1; i>=0; i--)
-    {
-        std::cout << int(array[i]) << " ";
-    }
+    if (l==0)
+        std::cout << "0 ";
+    else
+        for (int i=l-1; i>=0; i--){
+            std::cout << int(array[i]) << " ";
+        }
     std::cout << std::endl;;
 }
 

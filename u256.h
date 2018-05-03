@@ -13,16 +13,19 @@ public:
     u256( unsigned int n = 0 );
 
     u256 &operator=(const u256 &other);
-
-    u256 operator+(const u256 &other) const;
-    u256 operator-(const u256 &other) const;
-    u256 operator*(const u256 &other) const;
+    u256 &operator<<(int n);
+    u256 &operator>>(int n);
 
     bool operator==(const u256 &other) const;
     bool operator< (const u256 &other) const;
     bool operator<=(const u256 &other) const;
     bool operator> (const u256 &other) const;
     bool operator>=(const u256 &other) const;
+
+    u256 operator+(const u256 &other) const;
+    u256 operator-(const u256 &other) const;
+    u256 operator*(const u256 &other) const;
+    u256 operator/(const u256 &other) const;
 
     const unsigned char &operator[]( int i ) const;
 
