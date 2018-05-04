@@ -7,8 +7,7 @@ class u256
 {
 public:
     static const int array_size = 256;
-    //static const unsigned int base = 256;
-    static const unsigned int base = 10; //TODO поменять базу на 256
+    static const unsigned int base = 256;
 
     u256( unsigned int n = 0 );
 
@@ -26,8 +25,10 @@ public:
     u256 operator-(const u256 &other) const;
     u256 operator*(const u256 &other) const;
     u256 operator/(const u256 &other) const;
+    u256 operator%(const u256 &other) const;
 
     const unsigned char &operator[]( int i ) const;
+    bool division(const u256 &other, u256 &whole, u256 &remainder) const;
 
     void clear();
     int  length() const;
@@ -43,5 +44,6 @@ private:
     void calculate_length();
 
 };
+
 
 #endif // U256_H

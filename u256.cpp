@@ -41,11 +41,6 @@ u256 u256::operator-( const u256 &other ) const
         l = array[i] - c - other[i];
         c = l<0 ? 1 : 0;
         result.set(i, base * c + l);
-        /* Без условия, но так медленнее (наверное).
-         * l = base + array[i] - c - other[i];
-         * array[i] = l % base;
-         * c = 1 - l / base;
-         */
     }
     return result;
 }
@@ -127,27 +122,16 @@ u256 u256::operator*( const u256 & other ) const
 
 u256 u256::operator/(const u256 &other) const
 {
-    u256 r;
-    if(other == r) return r; //division by zero
+    u256 wh, re;
+    division(other, wh, re );
+    return wh;
+}
 
-    u256 m,s;
-    m = *this;
-    s = other;
-
-    if (m.length() > s.length()) {
-        s << ( m.length() - s.length() );
-    }
-
-    for (;;){
-        while ( m >= s ){
-            m = m - s;
-            r = r + 1;
-        }
-        if ( s.length() <= other.length() ) break;
-        s >> 1;
-        r << 1;
-    }
-    return r;
+u256 u256::operator%(const u256 &other) const
+{
+    u256 wh, re;
+    division(other, wh, re );
+    return re;
 }
 
 void u256::clear()
@@ -198,4 +182,31 @@ void u256::calculate_length()
     while ( array[_length-1] == 0 && _length > 0 ){
         _length--;
     }
+}
+
+bool u256::division(const u256 &other, u256 &whole, u256 &remainder) const
+{
+    u256 r;
+    if(other == r) return false; //division by zero
+
+    u256 m,s;
+    m = *this;
+    s = other;
+
+    if (m.length() > s.length()) {
+        s << ( m.length() - s.length() );
+    }
+
+    for (;;){
+        while ( m >= s ){
+            m = m - s;
+            r = r + 1;
+        }
+        if ( s.length() <= other.length() ) break;
+        s >> 1;
+        r << 1;
+    }
+    whole = r;
+    remainder = m;
+    return true;
 }
