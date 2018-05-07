@@ -2,6 +2,12 @@
 #define U256_H
 
 #include <iostream>
+#include <string>
+
+///////////////////////////////////////////////////////////////////////////////////////
+/// The u256 class
+/// Базовый класс для работы с целым числом в 256 байт
+///
 
 class u256
 {
@@ -10,6 +16,7 @@ public:
     static const unsigned int base = 256;
 
     u256( unsigned int n = 0 );
+    virtual ~u256();
 
     u256 &operator=(const u256 &other);
     u256 &operator<<(int n);
@@ -35,8 +42,6 @@ public:
     bool set( const u256 &other );
     bool set(int position, unsigned char value);
 
-    void print( bool full = false ) const;
-
 private:
     unsigned char array[array_size];
     int _length;
@@ -45,5 +50,22 @@ private:
 
 };
 
+///////////////////////////////////////////////////////////////////////////////////////
+/// The сu256 class
+/// Класс унаследованный от базового u256.
+/// Добавлены функции конвертации большого числа в DEC, HEX и обратно в виде строк
+///
+class cu256 : public u256
+{
+public:
+    cu256( unsigned int n = 0 );
+    virtual ~cu256();
+
+    bool fromHEX( const std::string &hex );
+
+private:
+    bool check_hex( const std::string &hex ) const;
+
+};
 
 #endif // U256_H

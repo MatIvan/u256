@@ -12,6 +12,11 @@ u256::u256(unsigned int n)
     calculate_length();
 }
 
+u256::~u256()
+{
+
+}
+
 const unsigned char &u256::operator[]( int i) const
 {
     return array[i];
@@ -164,18 +169,6 @@ bool u256::set(int position, unsigned char value)
     return true;
 }
 
-void u256::print( bool full ) const
-{
-    int l = full ? array_size : length();
-    if (l==0)
-        std::cout << "0 ";
-    else
-        for (int i=l-1; i>=0; i--){
-            std::cout << int(array[i]) << " ";
-        }
-    std::cout << std::endl;;
-}
-
 void u256::calculate_length()
 {
     _length = array_size;
@@ -209,4 +202,33 @@ bool u256::division(const u256 &other, u256 &whole, u256 &remainder) const
     whole = r;
     remainder = m;
     return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+cu256::cu256(unsigned int n)
+    : u256( n )
+{
+
+}
+
+cu256::~cu256()
+{
+
+}
+
+bool cu256::fromHEX(const std::string &hex)
+{
+
+}
+
+bool cu256::check_hex(const std::string &hex) const
+{
+
+    if ( hex.substr(0,2) != "0x" ) return false;
+    for ( int i=2; i<hex.size(); i++ ){
+        if ( hex[i]> )
+    }
 }
