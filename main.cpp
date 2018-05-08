@@ -12,12 +12,16 @@ int main()
     u256 C, D;
 
     cu256 E;
-    cout << ">" << E.from_std_string("0xff",16);
+    cout << ">" << E.from_std_string("0xf7589236ffce30da",16);
 
     cout << "\n\n";
     for ( int i = 255; i >= 0; i--){
         cout << " " <<  int(E[i]);
     }
+
+    cout << "\n\n";
+    string S = E.to_std_string(16);
+    cout << "S = " << S;
 
     return 0;
 }

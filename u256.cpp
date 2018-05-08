@@ -204,6 +204,14 @@ bool u256::division(const u256 &other, u256 &whole, u256 &remainder) const
     return true;
 }
 
+bool u256::division(const u256 &other, u256 &whole, char &remainder) const
+{
+    u256 r(remainder);
+    if (!division(other,whole,r)) return false;
+    remainder = r[0];
+    return true;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -251,6 +259,26 @@ bool cu256::from_std_string(const std::string &str, int Base )
     }
 
     return true;
+}
+
+std::string cu256::to_std_string(int Base)
+{
+    std::string res;
+    if ( (Base<1)||(Base>16) ) return res;
+
+    std::string chs = "0123456789abcdef";
+
+    char ch=0;
+    u256 n = *this;
+    u256 m;
+
+    while ( n > 0 ){
+        n.division( Base, m, ch );
+        n = m;
+        res.insert( 0, chs.substr(ch,1) );
+    }
+    if (Base==16) res.insert(0,"0x");
+    return res;
 }
 
 bool cu256::check_hex(const std::string &hex) const

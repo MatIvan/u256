@@ -37,6 +37,7 @@ public:
 
     const unsigned char &operator[]( int i ) const;
     bool division(const u256 &other, u256 &whole, u256 &remainder) const;
+    bool division(const u256 &other, u256 &whole, char &remainder) const;
 
     void clear();
     int  length() const;
@@ -63,6 +64,7 @@ public:
     virtual ~cu256();
 
     bool from_std_string(const std::string &str, int Base );
+    std::string to_std_string  ( int Base );
 
 private:
     bool check_hex( const std::string &hex ) const;
