@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 ///////////////////////////////////////////////////////////////////////////////////////
 /// The u256 class
@@ -61,11 +62,12 @@ public:
     cu256( unsigned int n = 0 );
     virtual ~cu256();
 
-    bool fromHEX( const std::string &hex );
+    bool from_std_string(const std::string &str, int Base );
 
 private:
     bool check_hex( const std::string &hex ) const;
-
+    bool check_dec( const std::string &dec ) const;
+    void normalize( std::vector<int> &V);
 };
 
 #endif // U256_H

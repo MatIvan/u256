@@ -219,16 +219,66 @@ cu256::~cu256()
 
 }
 
-bool cu256::fromHEX(const std::string &hex)
+bool cu256::from_std_string(const std::string &str, int Base )
 {
+    unsigned start;
 
+    if (Base==16){
+        if ( !check_hex( str ) ) return false;
+        start = 2;
+    }
+    if (Base==10){
+        if ( !check_dec( str ) ) return false;
+        start = 0;
+    }
+
+    std::vector<int> res(1);
+    unsigned i, j;
+    for ( i = start ; i < str.size(); i++){
+
+        for( j=0; j<res.size(); j++){
+            res[j] *= Base;
+        }
+
+        int dig = std::stoi( std::string(1, str[i]), 0, Base );
+        res.front() += dig;
+        normalize( res );
+    }
+
+    clear();
+    for ( i = 0 ; i < res.size(); i++ ){
+        set(i, (unsigned char)(res[i]) );
+    }
+
+    return true;
 }
 
 bool cu256::check_hex(const std::string &hex) const
 {
-
     if ( hex.substr(0,2) != "0x" ) return false;
-    for ( int i=2; i<hex.size(); i++ ){
-        if ( hex[i]> )
+    for ( unsigned i=2; i<hex.size(); i++ ){
+        if ( ( toupper(hex[i]<'A'))||(toupper(hex[i])>'F') )
+            if ( (hex[i]<'0')||(hex[i]>'9') ) return false;
     }
+    return true;
+}
+
+bool cu256::check_dec(const std::string &dec) const
+{
+    for ( unsigned i=0; i<dec.size(); i++ ){
+        if ( (dec[i]<'0')||(dec[i]>'9') ) return false;
+    }
+    return true;
+}
+
+void cu256::normalize(std::vector<int> &V)
+{
+    int remainder{};
+    for ( unsigned i = 0; i < V.size(); i++ ){
+        V[i] += remainder;
+        remainder = V[i] / base;
+        V[i] %= base;
+    }
+    if( remainder ) V.push_back( remainder );
+    if ( (unsigned)V.back() >= base ) normalize( V );
 }

@@ -11,14 +11,13 @@ int main()
     u256 B(15);
     u256 C, D;
 
-    cout << "\nA = "; A.print();
-    cout << "\nB = "; B.print();
+    cu256 E;
+    cout << ">" << E.from_std_string("0xff",16);
 
-    A.division(B,C,D);
-    cout << "\n C = A / B";
-    cout << "\n D = A % B\n";
-    cout << "\nC = "; C.print();
-    cout << "\nD = "; D.print();
+    cout << "\n\n";
+    for ( int i = 255; i >= 0; i--){
+        cout << " " <<  int(E[i]);
+    }
 
     return 0;
 }
